@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using PM.AppServer.Models;
+using PM.AppServer.Models.Data;
 using PM.AppServer.Services;
 
 namespace PM.AppServer
@@ -22,11 +25,11 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
+        services.Configure<List<PlagueDataType>>(Configuration.GetSection(nameof(PlagueDataType)));
 
-        services.AddSingleton<IPlagueDataTypesService, PlagueDataTypesService>();
         services.AddSingleton<IPlagueDataService, PlagueDataService>();
 
-        services.AddControllers();
+        services.AddControllers().AddNewtonsoftJson();
 
         services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
     }

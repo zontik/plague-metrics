@@ -1,13 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
 namespace PM.AppServer.Models
 {
 
 public class AppSettings
 {
-    public string DataFetchUrl { get; set; } = string.Empty;
+    [JsonIgnore]
+    public string DataFetchUrl { get; set; }
 
-    public TimeSpan CacheTtl { get; set; } = TimeSpan.FromSeconds(30);
+    [JsonIgnore] 
+    public string DataApiKey { get; set; }
+
+    public long CacheTtlMs { get; set; }
 }
 
 }

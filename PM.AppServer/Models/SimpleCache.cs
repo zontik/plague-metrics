@@ -13,9 +13,9 @@ public class SimpleCache<K, V>
     private readonly ReaderWriterLockSlim _guard = new();
     private readonly Dictionary<K, V> _cache;
 
-    public SimpleCache(TimeSpan cacheTtl)
+    public SimpleCache(long cacheTtlMs)
     {
-        _cacheTtl = cacheTtl;
+        _cacheTtl = TimeSpan.FromMilliseconds(cacheTtlMs);
         _cache = new Dictionary<K, V>();
     }
 

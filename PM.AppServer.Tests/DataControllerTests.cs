@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Newtonsoft.Json;
 using PM.AppServer.Models.Data;
 using Xunit;
 
@@ -36,7 +36,7 @@ public class DataControllerTests
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
-        var list = JsonSerializer.Deserialize<IEnumerable<PlagueDataType>>(content);
+        var list = JsonConvert.DeserializeObject<IEnumerable<PlagueDataType>>(content);
         //Act
 
         //Assert
@@ -57,7 +57,7 @@ public class DataControllerTests
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
-        var list = JsonSerializer.Deserialize<IEnumerable<PlagueData>>(content);
+        var list = JsonConvert.DeserializeObject<IEnumerable<PlagueData>>(content);
         //Act
 
         //Assert

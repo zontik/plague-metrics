@@ -8,8 +8,6 @@ import {interval} from 'rxjs';
 })
 export class HomeComponent implements OnInit {
   private readonly baseUrl: string;
-  private apiUrl: string = 'api/data';
-  private refreshInterval: number = 30_000;
 
   private http: HttpClient;
 
@@ -23,17 +21,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    let url = this.baseUrl + this.apiUrl + '/types';
-    this.http.get<PlagueDataType[]>(url).subscribe(res => {
-      this.dataTypes = res;
-      this.dataTypeSelected = this.dataTypes[0];
-
-      this.fetchData(this.dataTypeSelected.key);
-
-      interval(this.refreshInterval).subscribe(() => {
-        this.fetchData(this.dataTypeSelected.key);
-      });
-    }, err => console.error(err));
+    this.initSettings();
+    this.initData();
   }
 
   plagueDataTypeChange($event) {
@@ -41,9 +30,31 @@ export class HomeComponent implements OnInit {
     this.fetchData(this.dataTypeSelected.key);
   }
 
+  private initSettings() {
+    let url = this.baseUrl + 'api/settings';
+
+    this.http.get<AppSettings>(url).subscribe(res => {
+      debugger;
+
+      interval(res.cacheTtlMs).subscribe(() => {
+        this.fetchData(this.dataTypeSelected.key);
+      });
+    }, err => console.error(err));
+  }
+
+  private initData() {
+    let url = this.baseUrl + 'api/data/types';
+    this.http.get<PlagueDataType[]>(url).subscribe(res => {
+      this.dataTypes = res;
+      this.dataTypeSelected = this.dataTypes[0];
+
+      this.fetchData(this.dataTypeSelected.key);
+    }, err => console.error(err));
+  }
+
   private fetchData(typeKey: string) {
     let params = new HttpParams().set("typeKey", typeKey);
-    let url = this.baseUrl + this.apiUrl;
+    let url = this.baseUrl + 'api/data';
     this.http.get<PlagueData[]>(url, {params: params}).subscribe(res => {
       this.data = res;
     }, err => console.error(err));
