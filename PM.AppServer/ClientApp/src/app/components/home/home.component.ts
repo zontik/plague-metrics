@@ -25,8 +25,8 @@ export class HomeComponent implements OnInit {
     this.initData();
   }
 
-  plagueDataTypeChange($event) {
-    this.dataTypeSelected = $event;
+  plagueDataTypeChange(key) {
+    this.dataTypeSelected = this.dataTypes.find(el => el.key == key);
     this.fetchData(this.dataTypeSelected.key);
   }
 

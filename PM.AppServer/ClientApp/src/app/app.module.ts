@@ -6,6 +6,8 @@ import {RouterModule} from '@angular/router';
 
 import {AppComponent} from './app.component';
 import {HomeComponent} from './components/home/home.component';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import {HomeComponent} from './components/home/home.component';
     FormsModule,
     RouterModule.forRoot([
       {path: '', component: HomeComponent, pathMatch: 'full'},
-    ])
+    ]),
+    NoopAnimationsModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

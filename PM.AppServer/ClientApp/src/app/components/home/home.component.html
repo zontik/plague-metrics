@@ -1,10 +1,13 @@
-<div class="center-content">
+<div class="text-center pt-3">
   <h1>U.S. COVID Risk Tracker</h1>
 
-  <div *ngIf="dataTypes">
-    <select [(ngModel)]="dataTypeSelected" (ngModelChange)="plagueDataTypeChange($event)">
-      <option *ngFor="let type of dataTypes" [ngValue]="type">{{type.name}}</option>
-    </select>
+  <div *ngIf="dataTypes && dataTypeSelected" class="pt-3">
+    <mat-form-field appearance="outline">
+      <mat-label class="text-uppercase">Metric</mat-label>
+      <mat-select [(value)]="dataTypeSelected.key" (valueChange)="plagueDataTypeChange($event)">
+        <mat-option *ngFor="let type of dataTypes" [value]="type.key">{{type.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div *ngIf="data">
