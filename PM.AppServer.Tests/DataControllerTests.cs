@@ -19,7 +19,7 @@ public class DataControllerTests
     {
         var application = new WebApplicationFactory<Program>();
 
-        IHttpClientFactory httpClientFactory = new StaticHttpClientFactory(application.Server.CreateHandler());
+        var httpClientFactory = new TestsHttpClientFactory(application.Server.CreateHandler());
         _httpClient = httpClientFactory.CreateHttpClient();
         _httpClient.Timeout = TimeSpan.FromSeconds(3);
         _httpClient.BaseAddress = new Uri("http://localhost/api/");

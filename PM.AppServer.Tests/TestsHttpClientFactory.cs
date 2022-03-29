@@ -4,16 +4,11 @@ using System.Net.Http;
 namespace PM.AppServer.Tests
 {
 
-public interface IHttpClientFactory
-{
-    HttpClient CreateHttpClient();
-}
-
-public class StaticHttpClientFactory : IHttpClientFactory, IDisposable
+public class TestsHttpClientFactory : IDisposable
 {
     private readonly HttpMessageHandler _httpMessageHandler;
 
-    public StaticHttpClientFactory(HttpMessageHandler httpMessageHandler = default)
+    public TestsHttpClientFactory(HttpMessageHandler httpMessageHandler = default)
     {
         _httpMessageHandler = httpMessageHandler ?? new HttpClientHandler();
     }
@@ -23,7 +18,7 @@ public class StaticHttpClientFactory : IHttpClientFactory, IDisposable
         _httpMessageHandler.Dispose();
     }
 
-    HttpClient IHttpClientFactory.CreateHttpClient()
+    public HttpClient CreateHttpClient()
     {
         return new HttpClient(_httpMessageHandler, false);
     }
