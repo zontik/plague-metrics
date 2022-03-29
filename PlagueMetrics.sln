@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.AppServer", "PM.AppServer\PM.AppServer.csproj", "{B8B30FD8-EBA5-47A5-954F-C1293A2CCD00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.AppServer", "PM.AppServer\PM.AppServer.csproj", "{B8B30FD8-EBA5-47A5-954F-C1293A2CCD00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.AppServer.Tests", "PM.AppServer.Tests\PM.AppServer.Tests.csproj", "{F29EEC24-096D-4A11-BCD6-170C81E23E44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B8B30FD8-EBA5-47A5-954F-C1293A2CCD00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8B30FD8-EBA5-47A5-954F-C1293A2CCD00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8B30FD8-EBA5-47A5-954F-C1293A2CCD00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F29EEC24-096D-4A11-BCD6-170C81E23E44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F29EEC24-096D-4A11-BCD6-170C81E23E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F29EEC24-096D-4A11-BCD6-170C81E23E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F29EEC24-096D-4A11-BCD6-170C81E23E44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

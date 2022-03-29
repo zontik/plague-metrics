@@ -8,12 +8,12 @@ namespace PM.AppServer.Controllers
 
 [ApiController]
 [Route("api/data")]
-public class PlagueDataController : ControllerBase
+public class DataController : ControllerBase
 {
     private readonly IPlagueDataTypesService _typesService;
     private readonly IPlagueDataService _dataService;
 
-    public PlagueDataController(IPlagueDataTypesService typesService, IPlagueDataService dataService)
+    public DataController(IPlagueDataTypesService typesService, IPlagueDataService dataService)
     {
         _typesService = typesService;
         _dataService = dataService;
