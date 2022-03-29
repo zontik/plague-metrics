@@ -1,2 +1,2 @@
 # plague-metrics
-Plague metrics test wrb application
+Plague metrics test web application

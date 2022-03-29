@@ -1,0 +1,12 @@
+<div class="center-content">
+  <h1>U.S. COVID Risk Tracker</h1>
+
+  <div *ngIf="dataTypes">
+    <select [(ngModel)]="dataTypeSelected" (ngModelChange)="plagueDataTypeChange($event)">
+      <option *ngFor="let type of dataTypes" [ngValue]="type">{{type.name}}</option>
+    </select>
+  </div>
+
+  <div *ngIf="data">
+  </div>
+</div>
