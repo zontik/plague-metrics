@@ -21,12 +21,12 @@ public class PlagueDataService : IPlagueDataService
     private readonly AppSettings _appSettings;
 
     private readonly HttpClient _httpClient;
-    private readonly SimpleCache<string, IEnumerable<PlagueData>> _dataCache;
+    private readonly SimpleCache<JArray> _dataCache;
 
     public PlagueDataService(IOptions<AppSettings> appSettings)
     {
         _appSettings = appSettings.Value;
-        _dataCache = new SimpleCache<string, IEnumerable<PlagueData>>(_appSettings.CacheTtlMs);
+        _dataCache = new SimpleCache<JArray>(_appSettings.CacheTtlMs);
 
         _httpClient = new HttpClient();
         _httpClient.Timeout = TimeSpan.FromSeconds(3);
@@ -35,26 +35,30 @@ public class PlagueDataService : IPlagueDataService
 
     public async Task<IEnumerable<PlagueData>> List(string typeKey)
     {
-        if (_dataCache.TryGetValue(typeKey, out var data))
+        if (_dataCache.TryGetValue(nameof(PlagueDataService), out var cache))
         {
-            return data;
+            return ListPlagueData(cache, typeKey);
         }
 
-        var list = await ListPlagueData(typeKey);
-        _dataCache.Put(typeKey, list);
-
-        return list;
+        return await FetchPlagueData(typeKey);
     }
 
-    private async Task<IEnumerable<PlagueData>> ListPlagueData(string typeKey)
+    private async Task<IEnumerable<PlagueData>> FetchPlagueData(string typeKey)
     {
         var response = await _httpClient.GetAsync($"states.json?apiKey={_appSettings.DataApiKey}");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
-        var document = JArray.Parse(content);
-        var elements = document.Children();
-        return elements.Select(element => PlagueData.CreatePlagueData(typeKey, element)).ToList();
+        var jArray = JArray.Parse(content);
+
+        _dataCache.Put(nameof(PlagueDataService), jArray);
+
+        return ListPlagueData(jArray, typeKey);
+    }
+
+    private static IEnumerable<PlagueData> ListPlagueData(JToken jArray, string typeKey)
+    {
+        return jArray.Children().Select(element => PlagueData.CreatePlagueData(typeKey, element)).ToList();
     }
 }
 

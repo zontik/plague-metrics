@@ -34,8 +34,6 @@ export class HomeComponent implements OnInit {
     let url = this.baseUrl + 'api/settings';
 
     this.http.get<AppSettings>(url).subscribe(res => {
-      debugger;
-
       interval(res.cacheTtlMs).subscribe(() => {
         this.fetchData(this.dataTypeSelected.key);
       });

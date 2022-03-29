@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
 using PM.AppServer.Models;
 using PM.AppServer.Models.Data;
 using PM.AppServer.Services;
