@@ -52,7 +52,7 @@ public class DataControllerTests
         //Arrange
 
         //Act
-        var response = await _httpClient.GetAsync($"data?tokenPath=riskLevels.overall");
+        var response = await _httpClient.GetAsync("data?tokenPath=riskLevels.overall");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();

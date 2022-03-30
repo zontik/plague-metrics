@@ -1,3 +1,17 @@
 <div>
   <svg id="states" width="960" height="600"></svg>
 </div>
+<div class="pt-2" *ngIf="colors">
+  <div class="d-inline-block">
+    <b>Low</b><span class="risk-span"> risk</span>
+  </div>
+  <div class="d-inline-block pl-3 pr-3">
+    <div *ngFor="let color of colors; let i = index;" class="risk-level d-inline-block"
+         [ngClass]="{'risk-level-first': i == 0, 'risk-level-last': i == colors.length - 1}"
+         [ngStyle]="{ 'background-color': color, 'border-color': color, 'border-width': '2px' }">
+    </div>
+  </div>
+  <div class="d-inline-block">
+    <b>Severe</b><span class="risk-span"> risk</span>
+  </div>
+</div>

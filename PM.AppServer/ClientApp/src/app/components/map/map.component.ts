@@ -10,8 +10,12 @@ import * as d3 from 'd3';
 })
 export class MapComponent implements OnInit, OnChanges {
   @Input() data: PlagueData[];
+  colors: string[];
+  statesPaths: any[];
 
   constructor(private mapService: MapService) {
+    this.colors = this.mapService.colors;
+    this.statesPaths = this.mapService.statesPaths;
   }
 
   ngOnInit() {
@@ -25,19 +29,17 @@ export class MapComponent implements OnInit, OnChanges {
 
   private drawMap() {
     let self = this;
-    let statesPaths = this.mapService.statesPaths;
-    let colors = this.mapService.colors;
     let noDataColor = this.mapService.noDataColor;
 
     d3.select('#states')
       .selectAll('.state')
-      .data(statesPaths).enter().append('path')
+      .data(self.statesPaths).enter().append('path')
       .attr('class', 'state')
       .attr('d', function (state) {
         return state.d;
       })
       .style('fill', function (state) {
-        return self.getColor(state.id, colors, noDataColor);
+        return self.getColor(state.id, self.colors, noDataColor);
       });
   }
 
