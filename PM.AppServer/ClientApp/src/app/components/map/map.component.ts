@@ -40,6 +40,16 @@ export class MapComponent implements OnInit, OnChanges {
       })
       .style('fill', function (state) {
         return self.getColor(state.id, self.colors, noDataColor);
+      })
+      .on('mouseover', (d, s) => {
+        d3.select('#tooltip').transition().duration(200).style('opacity', .9);
+        let stateData = self.data.find(d => d.stateId.toLocaleLowerCase() == s.id.toLocaleLowerCase());
+        d3.select('#tooltip').html(MapComponent.toolTipHtml(s.n, stateData ? stateData.level : ''))
+          .style('left', d.pageX + 'px')
+          .style('top', (d.pageY - 28) + 'px');
+      })
+      .on('mouseout', () => {
+        d3.select('#tooltip').transition().duration(500).style('opacity', 0);
       });
   }
 
@@ -56,5 +66,11 @@ export class MapComponent implements OnInit, OnChanges {
     }
 
     return noDataColor;
+  }
+
+  private static toolTipHtml(header, value): string {
+    return '<h4>' + header + '</h4><table>' +
+      '<tr><td> Level: ' + value + '</td></tr>' +
+      '</table>';
   }
 }
