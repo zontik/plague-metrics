@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace PM.AppServer.Models.Data
 {
@@ -15,10 +14,10 @@ public class PlagueData
     {
     }
 
-    public PlagueData(JToken jToken, string tokenPath)
+    public PlagueData(string stateId, int level)
     {
-        StateId = jToken.Value<string>("state");
-        Level = (int)jToken.SelectToken(tokenPath, true);
+        StateId = stateId;
+        Level = level;
     }
 }
 

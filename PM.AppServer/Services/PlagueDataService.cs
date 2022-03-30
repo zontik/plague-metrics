@@ -75,7 +75,13 @@ public class PlagueDataService : IPlagueDataService
 
     private static List<PlagueData> ListPlagueData(JEnumerable<JToken> jTokens, string tokenPath)
     {
-        return jTokens.Select(jToken => new PlagueData(jToken, tokenPath)).ToList();
+        return jTokens.Select(jToken =>
+            {
+                var stateId = jToken.Value<string>("state");
+                var level = (int)jToken.SelectToken(tokenPath, true);
+                return new PlagueData(stateId, level);
+            }
+        ).ToList();
     }
 }
 
