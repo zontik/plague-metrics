@@ -1,7 +1,7 @@
-<div class="text-center" fxLayout="column">
+<div fxLayout="column" fxLayoutAlign="space-around center" >
   <h2>U.S. COVID Risk Tracker</h2>
 
-  <div *ngIf="dataTypes && tokenPath">
+  <div *ngIf="dataTypes && tokenPath" fxLayout="column">
     <mat-form-field appearance="outline">
       <mat-label class="text-uppercase">Metric</mat-label>
       <mat-select [(value)]="tokenPath" (valueChange)="plagueDataTypeChange($event)">
@@ -10,7 +10,7 @@
     </mat-form-field>
   </div>
 
-  <div *ngIf="data">
+  <div *ngIf="data" fxLayout="column" fxLayoutAlign="space-around center">
     <app-map [data]="data"></app-map>
   </div>
 </div>

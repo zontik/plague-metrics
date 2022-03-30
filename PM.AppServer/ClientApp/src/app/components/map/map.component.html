@@ -1,17 +1,19 @@
 <div>
   <svg id="states" width="816" height="510" viewBox="0 0 960 600"></svg>
 </div>
-<div class="pt-2" *ngIf="colors">
-  <div class="d-inline-block">
-    <b>Low</b><span class="risk-span"> risk</span>
-  </div>
-  <div class="d-inline-block pl-3 pr-3">
-    <div *ngFor="let color of colors; let i = index;" class="risk-level d-inline-block"
-         [ngClass]="{'risk-level-first': i == 0, 'risk-level-last': i == colors.length - 1}"
-         [ngStyle]="{ 'background-color': color, 'border-color': color, 'border-width': '2px' }">
+<div class="pt-2" *ngIf="colors" fxLayout="column" fxLayoutAlign="space-around center">
+  <div fxLayout="row">
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <b>Low</b><span class="risk-span ml-1"> risk</span>
     </div>
-  </div>
-  <div class="d-inline-block">
-    <b>Severe</b><span class="risk-span"> risk</span>
+    <div fxLayout="row" fxLayoutAlign="center center" class="pl-3 pr-3">
+      <div *ngFor="let color of colors; let i = index;" class="risk-level d-inline-block"
+           [ngClass]="{'risk-level-first': i == 0, 'risk-level-last': i == colors.length - 1}"
+           [ngStyle]="{ 'background-color': color, 'border-color': color, 'border-width': '2px' }">
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <b>Severe</b><span class="risk-span ml-1"> risk</span>
+    </div>
   </div>
 </div>
