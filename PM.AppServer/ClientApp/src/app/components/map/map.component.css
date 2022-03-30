@@ -1,14 +1,4 @@
-﻿.state {
-  fill: none;
-  stroke: #a9a9a9;
-  stroke-width: 1;
-}
-
-.state:hover {
-  fill-opacity: 0.5;
-}
-
-.risk-span {
+﻿.risk-span {
   color: #c3c3c3 !important;
 }
 

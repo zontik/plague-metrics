@@ -1,3 +1,4 @@
+/*common*/
 html, body {
   height: 100%;
 }
@@ -6,3 +7,18 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+/*common*/
+
+/*map*/
+.state {
+  fill: none;
+  stroke: #edd5cb;
+  stroke-width: 1;
+}
+
+.state:hover {
+  fill-opacity: 0.5;
+}
+
+/*map*/
