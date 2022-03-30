@@ -23,13 +23,11 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    d3.selectAll('#states > *').remove();
-    this.drawMap();
+    this.reDrawMap();
   }
 
   private drawMap() {
     let self = this;
-    let noDataColor = this.mapService.noDataColor;
 
     d3.select('#states')
       .selectAll('.state')
@@ -39,7 +37,7 @@ export class MapComponent implements OnInit, OnChanges {
         return state.d;
       })
       .style('fill', function (state) {
-        return self.getColor(state.id, self.colors, noDataColor);
+        return self.getColor(state.id, self.colors);
       })
       .on('mouseover', (d, s) => {
         d3.select('#tooltip').transition().duration(200).style('opacity', .9);
@@ -53,7 +51,17 @@ export class MapComponent implements OnInit, OnChanges {
       });
   }
 
-  private getColor(stateId: string, colors: string[], noDataColor: string): string {
+  private reDrawMap() {
+    let self = this;
+
+    d3.select('#states')
+      .selectAll('.state')
+      .style('fill', function (state: any) {
+        return self.getColor(state.id, self.colors);
+      });
+  }
+
+  private getColor(stateId: string, colors: string[]): string {
     let stateData = this.data.find(d => d.stateId.toLocaleLowerCase() == stateId.toLocaleLowerCase());
     if (stateData) {
       if (stateData.level <= 1) {
@@ -65,7 +73,7 @@ export class MapComponent implements OnInit, OnChanges {
       return colors[stateData.level - 1];
     }
 
-    return noDataColor;
+    return this.mapService.noDataColor;
   }
 
   private static toolTipHtml(header, value): string {
