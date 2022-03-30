@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
 
   public data: PlagueData[];
   public dataTypes: PlagueDataType[];
-  public dataTypeSelected: PlagueDataType;
+  public tokenPath: string;
 
   constructor(httpClient: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.http = httpClient;
@@ -26,8 +26,8 @@ export class HomeComponent implements OnInit {
   }
 
   plagueDataTypeChange(tokenPath) {
-    this.dataTypeSelected = this.dataTypes.find(el => el.tokenPath == tokenPath);
-    this.fetchData(this.dataTypeSelected.tokenPath);
+    this.tokenPath = tokenPath;
+    this.fetchData(this.tokenPath);
   }
 
   private initSettings() {
@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
 
     this.http.get<AppSettings>(url).subscribe(res => {
       interval(res.cacheTtlMs).subscribe(() => {
-        this.fetchData(this.dataTypeSelected.tokenPath);
+        this.fetchData(this.tokenPath);
       });
     }, err => console.error(err));
   }
@@ -44,9 +44,9 @@ export class HomeComponent implements OnInit {
     let url = this.baseUrl + 'api/data/types';
     this.http.get<PlagueDataType[]>(url).subscribe(res => {
       this.dataTypes = res;
-      this.dataTypeSelected = this.dataTypes[0];
+      this.tokenPath = this.dataTypes[0].tokenPath;
 
-      this.fetchData(this.dataTypeSelected.tokenPath);
+      this.fetchData(this.tokenPath);
     }, err => console.error(err));
   }
 
