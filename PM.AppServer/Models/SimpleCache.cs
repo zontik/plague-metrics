@@ -11,7 +11,7 @@ public class SimpleCache<V>
     private DateTimeOffset _cacheUpdatedTime;
 
     private readonly ReaderWriterLockSlim _guard = new();
-    private readonly Dictionary<string, V> _cache;
+    private Dictionary<string, V> _cache;
 
     public SimpleCache(long cacheTtlMs)
     {
@@ -23,6 +23,16 @@ public class SimpleCache<V>
     {
         if (DateTimeOffset.Now - _cacheUpdatedTime > _cacheTtl)
         {
+            _guard.EnterWriteLock();
+            try
+            {
+                _cache = new Dictionary<string, V>();
+            }
+            finally
+            {
+                _guard.ExitWriteLock();
+            }
+
             val = default;
             return false;
         }
