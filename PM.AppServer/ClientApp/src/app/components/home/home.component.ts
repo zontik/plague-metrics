@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {interval} from 'rxjs';
 
 @Component({
@@ -25,9 +25,9 @@ export class HomeComponent implements OnInit {
     this.initData();
   }
 
-  plagueDataTypeChange(key) {
-    this.dataTypeSelected = this.dataTypes.find(el => el.key == key);
-    this.fetchData(this.dataTypeSelected.key);
+  plagueDataTypeChange(tokenPath) {
+    this.dataTypeSelected = this.dataTypes.find(el => el.tokenPath == tokenPath);
+    this.fetchData(this.dataTypeSelected.tokenPath);
   }
 
   private initSettings() {
@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
 
     this.http.get<AppSettings>(url).subscribe(res => {
       interval(res.cacheTtlMs).subscribe(() => {
-        this.fetchData(this.dataTypeSelected.key);
+        this.fetchData(this.dataTypeSelected.tokenPath);
       });
     }, err => console.error(err));
   }
@@ -46,12 +46,12 @@ export class HomeComponent implements OnInit {
       this.dataTypes = res;
       this.dataTypeSelected = this.dataTypes[0];
 
-      this.fetchData(this.dataTypeSelected.key);
+      this.fetchData(this.dataTypeSelected.tokenPath);
     }, err => console.error(err));
   }
 
-  private fetchData(typeKey: string) {
-    let params = new HttpParams().set("typeKey", typeKey);
+  private fetchData(tokenPath: string) {
+    let params = new HttpParams().set('tokenPath', tokenPath);
     let url = this.baseUrl + 'api/data';
     this.http.get<PlagueData[]>(url, {params: params}).subscribe(res => {
       this.data = res;

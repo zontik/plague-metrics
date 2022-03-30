@@ -21,7 +21,6 @@ public class DataControllerTests
 
         var httpClientFactory = new TestsHttpClientFactory(application.Server.CreateHandler());
         _httpClient = httpClientFactory.CreateHttpClient();
-        _httpClient.Timeout = TimeSpan.FromSeconds(3);
         _httpClient.BaseAddress = new Uri("http://localhost/api/");
     }
 
@@ -53,7 +52,7 @@ public class DataControllerTests
         //Arrange
 
         //Act
-        var response = await _httpClient.GetAsync("data");
+        var response = await _httpClient.GetAsync($"data?tokenPath=riskLevels.overall");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -62,7 +61,7 @@ public class DataControllerTests
 
         //Assert
         Assert.NotNull(list);
-        Assert.Empty(list);
+        Assert.NotEmpty(list);
         //Assert
     }
 }

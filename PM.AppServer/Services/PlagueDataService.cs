@@ -13,52 +13,69 @@ namespace PM.AppServer.Services
 
 public interface IPlagueDataService
 {
-    Task<IEnumerable<PlagueData>> List(string typeKey);
+    Task<IEnumerable<PlagueData>> List(string tokenPath);
 }
 
 public class PlagueDataService : IPlagueDataService
 {
     private readonly AppSettings _appSettings;
+    private readonly List<PlagueDataType> _dataTypes;
 
     private readonly HttpClient _httpClient;
-    private readonly SimpleCache<JArray> _dataCache;
+    private readonly SimpleCache<IEnumerable<PlagueData>> _dataCache;
 
-    public PlagueDataService(IOptions<AppSettings> appSettings)
+    public PlagueDataService(IOptions<AppSettings> appSettings, IOptions<List<PlagueDataType>> dataTypes)
     {
         _appSettings = appSettings.Value;
-        _dataCache = new SimpleCache<JArray>(_appSettings.CacheTtlMs);
+        _dataTypes = dataTypes.Value;
 
         _httpClient = new HttpClient();
-        _httpClient.Timeout = TimeSpan.FromSeconds(3);
         _httpClient.BaseAddress = new Uri(_appSettings.DataFetchUrl);
+
+        _dataCache = new SimpleCache<IEnumerable<PlagueData>>(_appSettings.CacheTtlMs);
     }
 
-    public async Task<IEnumerable<PlagueData>> List(string typeKey)
+    public async Task<IEnumerable<PlagueData>> List(string tokenPath)
     {
-        if (_dataCache.TryGetValue(nameof(PlagueDataService), out var cache))
+        if (!_dataTypes.Exists(dt => dt.TokenPath == tokenPath))
         {
-            return ListPlagueData(cache, typeKey);
+            throw new ArgumentOutOfRangeException(nameof(tokenPath), "Wrong tokenPath.");
         }
 
-        return await FetchPlagueData(typeKey);
+        if (_dataCache.TryGetValue(tokenPath, out var cache))
+        {
+            return cache;
+        }
+
+        return await FetchPlagueData(tokenPath);
     }
 
-    private async Task<IEnumerable<PlagueData>> FetchPlagueData(string typeKey)
+    private async Task<IEnumerable<PlagueData>> FetchPlagueData(string tokenPath)
     {
         var response = await _httpClient.GetAsync($"states.json?apiKey={_appSettings.DataApiKey}");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
-        var jArray = JArray.Parse(content);
+        var jTokens = JArray.Parse(content).Children();
 
-        _dataCache.Put(nameof(PlagueDataService), jArray);
+        var returnList = Enumerable.Empty<PlagueData>();
+        foreach (var type in _dataTypes)
+        {
+            var dataList = ListPlagueData(jTokens, type.TokenPath);
+            _dataCache.Put(type.TokenPath, dataList);
 
-        return ListPlagueData(jArray, typeKey);
+            if (type.TokenPath == tokenPath)
+            {
+                returnList = dataList;
+            }
+        }
+
+        return returnList;
     }
 
-    private static IEnumerable<PlagueData> ListPlagueData(JToken jArray, string typeKey)
+    private static List<PlagueData> ListPlagueData(JEnumerable<JToken> jTokens, string tokenPath)
     {
-        return jArray.Children().Select(element => PlagueData.CreatePlagueData(typeKey, element)).ToList();
+        return jTokens.Select(jToken => new PlagueData(jToken, tokenPath)).ToList();
     }
 }
 

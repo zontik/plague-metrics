@@ -1,4 +1,4 @@
 interface PlagueData {
-  state: string;
+  stateId: string;
   level: number;
 }

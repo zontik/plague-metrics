@@ -28,9 +28,9 @@ public class DataController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<PlagueData>>> ListData([FromQuery] string typeKey)
+    public async Task<ActionResult<IEnumerable<PlagueData>>> ListData([FromQuery] string tokenPath)
     {
-        return Ok(await _dataService.List(typeKey));
+        return Ok(await _dataService.List(tokenPath));
     }
 }
 

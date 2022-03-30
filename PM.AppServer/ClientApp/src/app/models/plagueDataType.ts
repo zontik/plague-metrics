@@ -1,4 +1,4 @@
 interface PlagueDataType {
-  key: string;
+  tokenPath: string;
   name: string;
 }

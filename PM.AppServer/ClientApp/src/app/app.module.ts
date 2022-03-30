@@ -7,12 +7,14 @@ import {RouterModule} from '@angular/router';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './components/home/home.component';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {MatSelectModule } from '@angular/material/select';
+import {MatSelectModule} from '@angular/material/select';
+import {MapComponent} from './components/map/map.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    MapComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

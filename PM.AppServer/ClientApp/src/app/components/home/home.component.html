@@ -1,15 +1,16 @@
-<div class="text-center pt-3">
+<div class="text-center pt-1">
   <h1>U.S. COVID Risk Tracker</h1>
 
-  <div *ngIf="dataTypes && dataTypeSelected" class="pt-3">
+  <div *ngIf="dataTypes && dataTypeSelected">
     <mat-form-field appearance="outline">
       <mat-label class="text-uppercase">Metric</mat-label>
-      <mat-select [(value)]="dataTypeSelected.key" (valueChange)="plagueDataTypeChange($event)">
-        <mat-option *ngFor="let type of dataTypes" [value]="type.key">{{type.name}}</mat-option>
+      <mat-select [(value)]="dataTypeSelected.tokenPath" (valueChange)="plagueDataTypeChange($event)">
+        <mat-option *ngFor="let type of dataTypes" [value]="type.tokenPath">{{type.name}}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
 
   <div *ngIf="data">
+    <app-map [data]="data"></app-map>
   </div>
 </div>
