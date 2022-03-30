@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Testing;
+﻿using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PM.AppServer.Models;
 using Xunit;
@@ -9,27 +6,16 @@ using Xunit;
 namespace PM.AppServer.Tests
 {
 
-public class SettingsControllerTests
+public class SettingsControllerTests : ControllerTestsBase
 {
-    private readonly HttpClient _httpClient;
-
-    public SettingsControllerTests()
-    {
-        var application = new WebApplicationFactory<Program>();
-
-        var httpClientFactory = new TestsHttpClientFactory(application.Server.CreateHandler());
-        _httpClient = httpClientFactory.CreateHttpClient();
-        _httpClient.BaseAddress = new Uri("http://localhost/api/");
-    }
-
     [Fact]
-    public async Task Get_ReturnsSettings()
+    public async Task Get_ReturnsSettings_WithoutApiKeyAndFetchUrl()
     {
         //Arrange
         //Arrange
 
         //Act
-        var response = await _httpClient.GetAsync("settings");
+        var response = await HttpClient.GetAsync("settings");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
