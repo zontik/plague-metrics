@@ -42,7 +42,7 @@ export class MapComponent implements OnInit, OnChanges {
       .on('mouseover', (d, s) => {
         d3.select('#tooltip').transition().duration(200).style('opacity', .9);
         let stateData = self.plagueData.find(d => d.stateId.toLocaleLowerCase() == s.id.toLocaleLowerCase());
-        d3.select('#tooltip').html(MapComponent.toolTipHtml(s.n, stateData ? stateData.level : ''))
+        d3.select('#tooltip').html(MapComponent.toolTipHtml(s.n, stateData ? stateData.level : 'no data'))
           .style('left', d.pageX + 'px')
           .style('top', (d.pageY - 28) + 'px');
       })
@@ -77,8 +77,6 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   private static toolTipHtml(header, value): string {
-    return '<h4>' + header + '</h4><table>' +
-      '<tr><td> Level: ' + value + '</td></tr>' +
-      '</table>';
+    return `<h4>${header}</h4><span>Level: ${value}</span>`;
   }
 }
