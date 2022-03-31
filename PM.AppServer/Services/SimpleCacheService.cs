@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using PM.AppServer.Services.Base;
 
-namespace PM.AppServer.Models
+namespace PM.AppServer.Services
 {
 
-public class SimpleCache<V>
+public class SimpleCacheService<V> : ICacheService<V>
 {
     private readonly TimeSpan _cacheTtl;
     private DateTimeOffset _cacheUpdatedTime;
@@ -13,7 +14,7 @@ public class SimpleCache<V>
     private readonly ReaderWriterLockSlim _guard = new();
     private Dictionary<string, V> _cache;
 
-    public SimpleCache(long cacheTtlMs)
+    public SimpleCacheService(long cacheTtlMs)
     {
         _cacheTtl = TimeSpan.FromMilliseconds(cacheTtlMs);
         _cache = new Dictionary<string, V>();

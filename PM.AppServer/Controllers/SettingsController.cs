@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using PM.AppServer.Models;
+using PM.Model;
 
 namespace PM.AppServer.Controllers
 {

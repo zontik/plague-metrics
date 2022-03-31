@@ -11,8 +11,8 @@ export class HomeComponent implements OnInit {
 
   private http: HttpClient;
 
-  public data: PlagueData[];
-  public dataTypes: PlagueDataType[];
+  public plagueData: PlagueData[];
+  public plagueDataTypes: PlagueDataType[];
   public tokenPath: string;
 
   constructor(httpClient: HttpClient, @Inject('BASE_URL') baseUrl: string) {
@@ -22,12 +22,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.initSettings();
-    this.initData();
+    this.initPlagueData();
   }
 
   plagueDataTypeChange(tokenPath) {
     this.tokenPath = tokenPath;
-    this.fetchData(this.tokenPath);
+    this.fetchPlagueData(this.tokenPath);
   }
 
   private initSettings() {
@@ -35,26 +35,26 @@ export class HomeComponent implements OnInit {
 
     this.http.get<AppSettings>(url).subscribe(res => {
       interval(res.cacheTtlMs).subscribe(() => {
-        this.fetchData(this.tokenPath);
+        this.fetchPlagueData(this.tokenPath);
       });
     }, err => console.error(err));
   }
 
-  private initData() {
-    let url = this.baseUrl + 'api/data/types';
+  private initPlagueData() {
+    let url = this.baseUrl + 'api/plague_data/types';
     this.http.get<PlagueDataType[]>(url).subscribe(res => {
-      this.dataTypes = res;
-      this.tokenPath = this.dataTypes[0].tokenPath;
+      this.plagueDataTypes = res;
+      this.tokenPath = this.plagueDataTypes[0].tokenPath;
 
-      this.fetchData(this.tokenPath);
+      this.fetchPlagueData(this.tokenPath);
     }, err => console.error(err));
   }
 
-  private fetchData(tokenPath: string) {
+  private fetchPlagueData(tokenPath: string) {
     let params = new HttpParams().set('tokenPath', tokenPath);
-    let url = this.baseUrl + 'api/data';
+    let url = this.baseUrl + 'api/plague_data';
     this.http.get<PlagueData[]>(url, {params: params}).subscribe(res => {
-      this.data = res;
+      this.plagueData = res;
     }, err => console.error(err));
   }
 }

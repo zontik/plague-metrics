@@ -9,7 +9,7 @@ import * as d3 from 'd3';
   providers: [MapService]
 })
 export class MapComponent implements OnInit, OnChanges {
-  @Input() data: PlagueData[];
+  @Input() plagueData: PlagueData[];
   colors: string[];
   statesPaths: any[];
 
@@ -41,7 +41,7 @@ export class MapComponent implements OnInit, OnChanges {
       })
       .on('mouseover', (d, s) => {
         d3.select('#tooltip').transition().duration(200).style('opacity', .9);
-        let stateData = self.data.find(d => d.stateId.toLocaleLowerCase() == s.id.toLocaleLowerCase());
+        let stateData = self.plagueData.find(d => d.stateId.toLocaleLowerCase() == s.id.toLocaleLowerCase());
         d3.select('#tooltip').html(MapComponent.toolTipHtml(s.n, stateData ? stateData.level : ''))
           .style('left', d.pageX + 'px')
           .style('top', (d.pageY - 28) + 'px');
@@ -62,7 +62,7 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   private getColor(stateId: string, colors: string[]): string {
-    let stateData = this.data.find(d => d.stateId.toLocaleLowerCase() == stateId.toLocaleLowerCase());
+    let stateData = this.plagueData.find(d => d.stateId.toLocaleLowerCase() == stateId.toLocaleLowerCase());
     if (stateData) {
       if (stateData.level <= 1) {
         return colors[0];

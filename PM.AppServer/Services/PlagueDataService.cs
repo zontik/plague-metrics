@@ -5,16 +5,12 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using PM.AppServer.Models;
-using PM.AppServer.Models.Data;
+using PM.AppServer.Services.Base;
+using PM.Model;
+using PM.Model.Data;
 
 namespace PM.AppServer.Services
 {
-
-public interface IPlagueDataService
-{
-    Task<IEnumerable<PlagueData>> List(string tokenPath);
-}
 
 public class PlagueDataService : IPlagueDataService
 {
@@ -22,7 +18,7 @@ public class PlagueDataService : IPlagueDataService
     private readonly List<PlagueDataType> _dataTypes;
 
     private readonly HttpClient _httpClient;
-    private readonly SimpleCache<IEnumerable<PlagueData>> _dataCache;
+    private readonly ICacheService<IEnumerable<PlagueData>> _cacheService;
 
     public PlagueDataService(IOptions<AppSettings> appSettings, IOptions<List<PlagueDataType>> dataTypes)
     {
@@ -32,17 +28,17 @@ public class PlagueDataService : IPlagueDataService
         _httpClient = new HttpClient();
         _httpClient.BaseAddress = new Uri(_appSettings.DataFetchUrl);
 
-        _dataCache = new SimpleCache<IEnumerable<PlagueData>>(_appSettings.CacheTtlMs);
+        _cacheService = new SimpleCacheService<IEnumerable<PlagueData>>(_appSettings.CacheTtlMs);
     }
 
-    public async Task<IEnumerable<PlagueData>> List(string tokenPath)
+    public async Task<IEnumerable<PlagueData>> ListData(string tokenPath)
     {
         if (!_dataTypes.Exists(dt => dt.TokenPath == tokenPath))
         {
             throw new ArgumentOutOfRangeException(nameof(tokenPath), "Wrong tokenPath.");
         }
 
-        if (_dataCache.TryGetValue(tokenPath, out var cache))
+        if (_cacheService.TryGetValue(tokenPath, out var cache))
         {
             return cache;
         }
@@ -62,7 +58,7 @@ public class PlagueDataService : IPlagueDataService
         foreach (var type in _dataTypes)
         {
             var dataList = ListPlagueData(jTokens, type.TokenPath);
-            _dataCache.Put(type.TokenPath, dataList);
+            _cacheService.Put(type.TokenPath, dataList);
 
             if (type.TokenPath == tokenPath)
             {

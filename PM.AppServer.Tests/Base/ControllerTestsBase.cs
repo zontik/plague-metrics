@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
+using PM.AppServer.Tests.Services;
 
-namespace PM.AppServer.Tests
+namespace PM.AppServer.Tests.Base
 {
 
 public class ControllerTestsBase

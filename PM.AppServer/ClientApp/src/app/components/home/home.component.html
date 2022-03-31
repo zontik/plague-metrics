@@ -1,16 +1,16 @@
 <div fxLayout="column" fxLayoutAlign="space-around center" >
   <h2>U.S. COVID Risk Tracker</h2>
 
-  <div *ngIf="dataTypes && tokenPath" fxLayout="column">
+  <div *ngIf="plagueDataTypes && tokenPath" fxLayout="column">
     <mat-form-field appearance="outline">
       <mat-label class="text-uppercase">Metric</mat-label>
       <mat-select [(value)]="tokenPath" (valueChange)="plagueDataTypeChange($event)">
-        <mat-option *ngFor="let type of dataTypes" [value]="type.tokenPath">{{type.name}}</mat-option>
+        <mat-option *ngFor="let type of plagueDataTypes" [value]="type.tokenPath">{{type.name}}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
 
-  <div *ngIf="data" fxLayout="column" fxLayoutAlign="space-around center">
-    <app-map [data]="data"></app-map>
+  <div *ngIf="plagueData" fxLayout="column" fxLayoutAlign="space-around center">
+    <app-map [plagueData]="plagueData"></app-map>
   </div>
 </div>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace PM.AppServer.Tests
+namespace PM.AppServer.Tests.Services
 {
 
 public class TestsHttpClientFactory : IDisposable

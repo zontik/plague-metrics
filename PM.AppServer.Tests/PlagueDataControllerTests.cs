@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using PM.AppServer.Models.Data;
+using PM.AppServer.Tests.Base;
+using PM.Model.Data;
 using Xunit;
 
 namespace PM.AppServer.Tests
 {
 
-public class DataControllerTests : ControllerTestsBase
+public class PlagueDataControllerTests : ControllerTestsBase
 {
     [Fact]
     public async Task ListDataTypes_ReturnsList()
@@ -18,7 +19,7 @@ public class DataControllerTests : ControllerTestsBase
         //Arrange
 
         //Act
-        var response = await HttpClient.GetAsync("data/types");
+        var response = await HttpClient.GetAsync("plague_data/types");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -39,7 +40,7 @@ public class DataControllerTests : ControllerTestsBase
         //Arrange
 
         //Act
-        var response = await HttpClient.GetAsync("data?tokenPath=riskLevels.overall");
+        var response = await HttpClient.GetAsync("plague_data?tokenPath=riskLevels.overall");
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
@@ -59,7 +60,7 @@ public class DataControllerTests : ControllerTestsBase
         //Arrange
 
         //Act
-        var response = await HttpClient.GetAsync("data?tokenPath=invalidToken");
+        var response = await HttpClient.GetAsync("plague_data?tokenPath=invalidToken");
         //Act
 
         //Assert

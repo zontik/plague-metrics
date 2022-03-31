@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PM.AppServer.Models
+namespace PM.Model
 {
 
 public class AppSettings

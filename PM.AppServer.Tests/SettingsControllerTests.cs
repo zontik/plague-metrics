@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Newtonsoft.Json;
-using PM.AppServer.Models;
+using PM.AppServer.Tests.Base;
+using PM.Model;
 using Xunit;
 
 namespace PM.AppServer.Tests

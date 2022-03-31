@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PM.AppServer.Models.Data
+namespace PM.Model.Data
 {
 
 public class PlagueData

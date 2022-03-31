@@ -21,4 +21,8 @@
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PM.Model\PM.Model.csproj" />
+  </ItemGroup>
 </Project>
