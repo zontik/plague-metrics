@@ -5,6 +5,11 @@
 .risk-level {
   width: 40px;
   height: 9px;
+  cursor: pointer;
+}
+
+.risk-level:hover {
+  opacity: .5;
 }
 
 .risk-level-first {

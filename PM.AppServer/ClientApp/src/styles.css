@@ -15,10 +15,11 @@ body {
   fill: none;
   stroke: #edd5cb;
   stroke-width: 1;
+  cursor: pointer;
 }
 
 .state:hover {
-  fill-opacity: 0.5;
+  fill-opacity: .5;
 }
 
 #tooltip {

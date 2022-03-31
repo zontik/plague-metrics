@@ -7,7 +7,7 @@
       <b>Low</b><span class="risk-span ml-1"> risk</span>
     </div>
     <div fxLayout="row" fxLayoutAlign="center center" class="pl-3 pr-3">
-      <div *ngFor="let color of colors; let i = index;" class="risk-level d-inline-block"
+      <div *ngFor="let color of colors; let i = index;" [title]="'Level ' + (i + 1)" class="risk-level d-inline-block"
            [ngClass]="{'risk-level-first': i == 0, 'risk-level-last': i == colors.length - 1}"
            [ngStyle]="{ 'background-color': color, 'border-color': color, 'border-width': '2px' }">
       </div>
