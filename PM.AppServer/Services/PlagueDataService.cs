@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using PM.AppServer.Services.Base;
@@ -18,17 +19,20 @@ public class PlagueDataService : IPlagueDataService
     private readonly List<PlagueDataType> _dataTypes;
 
     private readonly HttpClient _httpClient;
-    private readonly ICacheService<IEnumerable<PlagueData>> _cacheService;
 
-    public PlagueDataService(IOptions<AppSettings> appSettings, IOptions<List<PlagueDataType>> dataTypes)
+    private readonly IMemoryCache _memoryCache;
+    private readonly TimeSpan _cacheTtl;
+
+    public PlagueDataService(IOptions<AppSettings> appSettings, IOptions<List<PlagueDataType>> dataTypes, IMemoryCache memoryCache)
     {
         _appSettings = appSettings.Value;
+
         _dataTypes = dataTypes.Value;
+        _memoryCache = memoryCache;
+        _cacheTtl = TimeSpan.FromMilliseconds(_appSettings.CacheTtlMs);
 
         _httpClient = new HttpClient();
         _httpClient.BaseAddress = new Uri(_appSettings.DataFetchUrl);
-
-        _cacheService = new SimpleCacheService<IEnumerable<PlagueData>>(_appSettings.CacheTtlMs);
     }
 
     public async Task<IEnumerable<PlagueData>> ListData(string tokenPath)
@@ -38,7 +42,7 @@ public class PlagueDataService : IPlagueDataService
             throw new ArgumentOutOfRangeException(nameof(tokenPath), "Wrong tokenPath.");
         }
 
-        if (_cacheService.TryGetValue(tokenPath, out var cache))
+        if (_memoryCache.TryGetValue(tokenPath, out IEnumerable<PlagueData> cache))
         {
             return cache;
         }
@@ -58,7 +62,7 @@ public class PlagueDataService : IPlagueDataService
         foreach (var type in _dataTypes)
         {
             var dataList = ListPlagueData(jTokens, type.TokenPath);
-            _cacheService.Put(type.TokenPath, dataList);
+            _memoryCache.Set(type.TokenPath, dataList, _cacheTtl);
 
             if (type.TokenPath == tokenPath)
             {

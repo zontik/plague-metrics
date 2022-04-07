@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,11 +25,16 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
+        var settingsSection = Configuration.GetSection(nameof(AppSettings));
+        services.Configure<AppSettings>(settingsSection);
         services.Configure<List<PlagueDataType>>(Configuration.GetSection(nameof(PlagueDataType)));
 
         services.AddSingleton<IPlagueDataService, PlagueDataService>();
 
+        services.AddMemoryCache(options =>
+        {
+            options.ExpirationScanFrequency = TimeSpan.FromMilliseconds(settingsSection.Get<AppSettings>().CacheTtlMs);
+        });
         services.AddControllers().AddNewtonsoftJson();
 
         services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });

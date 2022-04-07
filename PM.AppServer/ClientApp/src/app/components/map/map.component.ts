@@ -1,6 +1,8 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ElementRef, Inject} from '@angular/core';
 import {MapService} from '../../services/map.service';
 import * as d3 from 'd3';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {interval, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-map',
@@ -9,27 +11,81 @@ import * as d3 from 'd3';
   providers: [MapService]
 })
 export class MapComponent implements OnInit, OnChanges {
-  @Input() plagueData: PlagueData[];
+  @Input() tokenPath: string;
+  private readonly baseUrl: string;
+  private appSettings: AppSettings;
+
+  private http: HttpClient;
+  private timer: Subscription;
+
+  plagueData: PlagueData[];
+
   colors: string[];
   statesPaths: any[];
+  mapElement: ElementRef;
 
-  constructor(private mapService: MapService) {
+  constructor(httpClient: HttpClient, @Inject('BASE_URL') baseUrl: string, private mapService: MapService, mapElement: ElementRef) {
+    this.http = httpClient;
+    this.baseUrl = baseUrl;
+
     this.colors = this.mapService.colors;
     this.statesPaths = this.mapService.statesPaths;
+    this.mapElement = mapElement;
   }
 
   ngOnInit() {
-    this.drawMap();
+    this.initSettings();
+    this.fetchPlagueData(() => {
+      this.drawMap();
+    });
   }
 
   ngOnChanges() {
-    this.reDrawMap();
+    if (!this.plagueData) {
+      return
+    }
+
+    this.fetchPlagueData(() => {
+      this.reDrawMap();
+    });
+
+    this.startUpdateInterval(this.appSettings.cacheTtlMs);
+  }
+
+  private initSettings() {
+    let url = this.baseUrl + 'api/settings';
+
+    this.http.get<AppSettings>(url).subscribe(res => {
+      this.appSettings = res;
+      this.startUpdateInterval(this.appSettings.cacheTtlMs);
+    }, err => console.error(err));
+  }
+
+  private fetchPlagueData(cb) {
+    let params = new HttpParams().set('tokenPath', this.tokenPath);
+    let url = this.baseUrl + 'api/plague_data';
+    this.http.get<PlagueData[]>(url, {params: params}).subscribe(res => {
+      this.plagueData = res;
+      cb();
+    }, err => console.error(err));
+  }
+
+  private startUpdateInterval(cacheTtlMs: number) {
+    if (this.timer) {
+      this.timer.unsubscribe();
+    }
+
+    this.timer = interval(cacheTtlMs).subscribe(() => {
+      this.fetchPlagueData(() => {
+        this.reDrawMap();
+      });
+    });
   }
 
   private drawMap() {
     let self = this;
 
-    d3.select('#states')
+    d3.select(self.getSvgElement())
       .selectAll('.state')
       .data(self.statesPaths).enter().append('path')
       .attr('class', 'state')
@@ -54,11 +110,15 @@ export class MapComponent implements OnInit, OnChanges {
   private reDrawMap() {
     let self = this;
 
-    d3.select('#states')
+    d3.select(self.getSvgElement())
       .selectAll('.state')
       .style('fill', function (state: any) {
         return self.getColor(state.id, self.colors);
       });
+  }
+
+  private getSvgElement() {
+    return this.mapElement.nativeElement.querySelector('svg');
   }
 
   private getColor(stateId: string, colors: string[]): string {
