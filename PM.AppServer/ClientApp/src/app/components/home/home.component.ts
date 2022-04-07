@@ -22,10 +22,6 @@ export class HomeComponent implements OnInit {
     this.initPlagueDataTypes();
   }
 
-  plagueDataTypeChange(tokenPath) {
-    this.tokenPath = tokenPath;
-  }
-
   private initPlagueDataTypes() {
     let url = this.baseUrl + 'api/plague_data/types';
     this.http.get<PlagueDataType[]>(url).subscribe(res => {
