@@ -1,0 +1,35 @@
+<div fxLayout="column" fxLayoutAlign="space-around center">
+  <h2>U.S. COVID Risk Tracker</h2>
+
+  <div *ngIf="model.listDataTypes && model.selectedDataType" fxLayout="column">
+    <mat-form-field appearance="outline">
+      <mat-label class="text-uppercase">Metric</mat-label>
+      <mat-select [(ngModel)]="model.selectedDataType">
+        <mat-option *ngFor="let type of model.listDataTypes" [value]="type">{{type.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="column" fxLayoutAlign="space-around center">
+    <div>
+      <svg width="816" height="510" viewBox="0 0 960 600"></svg>
+    </div>
+
+    <div class="pt-2" *ngIf="colors" fxLayout="column" fxLayoutAlign="space-around center">
+      <div fxLayout="row">
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <b>Low</b><span class="risk-span ml-1"> risk</span>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" class="pl-3 pr-3">
+          <div *ngFor="let color of colors; let i = index;" [title]="'Level ' + (i + 1)" class="risk-level d-inline-block"
+               [ngClass]="{'risk-level-first': i == 0, 'risk-level-last': i == colors.length - 1}"
+               [ngStyle]="{'background-color': color, 'border-color': color, 'border-width': '2px' }">
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <b>Severe</b><span class="risk-span ml-1"> risk</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

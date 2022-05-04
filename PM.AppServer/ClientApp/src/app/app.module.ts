@@ -6,29 +6,30 @@ import {RouterModule} from '@angular/router';
 import {FlexLayoutModule} from '@angular/flex-layout';
 
 import {AppComponent} from './app.component';
-import {HomeComponent} from './components/home/home.component';
+import {DataViewComponent} from './components/data/data.view.component';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSelectModule} from '@angular/material/select';
-import {MapComponent} from './components/map/map.component';
+import {AppSettingsService} from './services/appSettings.service';
+import {DataService} from './services/data.service';
+import {MapService} from './services/map.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    MapComponent,
+    DataViewComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      {path: '', component: HomeComponent, pathMatch: 'full'},
+      {path: '', component: DataViewComponent, pathMatch: 'full'},
     ]),
     FlexLayoutModule,
     NoopAnimationsModule,
     MatSelectModule
   ],
-  providers: [],
+  providers: [AppSettingsService, DataService, MapService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
